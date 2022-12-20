@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/basic">
+<th:block layout:fragment="title">
+  <title>상세 페이지</title>
+</th:block>
+
+<th:block layout:fragment="content">
+  <div class="page_tits">
+    <h3>게시판 관리</h3>
+    <p class="path"><strong>현재 위치 :</strong> <span>게시판 관리</span> <span>리스트형</span> <span>상세정보</span></p>
+  </div>
+
+  <div class="content">
+    <section>
+      <table class="tb tb_row">
+        <colgroup>
+          <col style="width:10%;" /><col style="width:23%;" /><col style="width:10%;" /><col style="width:23%;" />
+        </colgroup>
+        <tbody>
+        <tr>
+          <th scope="row">글 유형</th>
+          <td th:text="${post.noticeYn == false ? '일반' : '공지'}"></td>
+
+          <th scope="row">등록일</th>
+          <td th:text="${#temporals.format( post.createdDate, 'yyyy-MM-dd HH:mm' )}"></td>
+        </tr>
+        <tr>
+          <th scope="row">제목</th>
+          <td>[[ ${post.title} ]]</td>
+
+          <th scope="row">조회</th>
+          <td colspan="3">[[ ${post.viewCnt} ]]</td>
+        </tr>
+        <tr>
+          <th scope="row">이름</th>
+          <td colspan="3">[[ ${post.writer} ]]</td>
+        </tr>
+        <tr>
+          <th scope="row">내용</th>
+          <td colspan="3">[[ ${post.content} ]]</td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="btn_set">
+        <a th:href="@{/post/write.do( id=${post.id} )}" class="btns btn_bdr4 btn_mid">수정</a>
+        <button type="button" class="btns btn_bdr1 btn_mid">삭제</button>
+        <a th:href="@{/post/list.do}" class="btns btn_bdr3 btn_mid">뒤로</a>
+      </p>
+    </section>
+  </div> <!--/* .content */-->
+</th:block>
+</html>
