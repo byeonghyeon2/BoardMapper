@@ -70,7 +70,7 @@
           FROM tb_post
          WHERE delete_yn = 0
          ORDER BY id DESC
-         LIMIT #{offset}, #{recordSize}
+         LIMIT #{pagination.limitStart}, #{recordSize}
     </select>
 
 

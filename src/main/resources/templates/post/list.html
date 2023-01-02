@@ -6,10 +6,9 @@
 
 <th:block layout:fragment="content">
   <div class="page_tits">
-    <h3>게시판 목록</h3>
+    <h3>게시판 관리</h3>
     <p class="path"><strong>현재 위치 :</strong> <span>게시판 관리</span> <span>리스트형</span> <span>리스트</span></p>
   </div>
-
   <div class="content">
     <section>
       <!--/* 검색 */-->
@@ -42,27 +41,15 @@
           <th scope="col">조회</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:if="${not #lists.isEmpty( posts )}" th:each="row, status : ${posts}">
-          <td><input type="checkbox" /></td>
-          <td th:text="${row.noticeYn == false ? (status.size - status.index) : '공지'}"></td>
-          <td class="tl"><a th:href="@{/post/view.do( id=${row.id} )}" th:text="${row.title}"></a></td>
-          <td th:text="${row.writer}"></td>
-          <td th:text="${#temporals.format( row.createdDate, 'yyyy-MM-dd HH:mm' )}"></td>
-          <td th:text="${row.viewCnt}"></td>
-        </tr>
+        <!--/* 리스트 데이터 렌더링 영역 */-->
+        <tbody id="list">
 
-        <tr th:unless="${not #lists.isEmpty( posts )}">
-          <td colspan="6"><div class="no_data_msg">검색된 결과가 없습니다.</div></td>
-        </tr>
         </tbody>
       </table>
 
-      <!--/* 페이지네이션 */-->
+      <!--/* 페이지네이션 렌더링 영역 */-->
       <div class="paging">
-        <a href="#" class="page_bt first">첫 페이지</a><a href="#" class="page_bt prev">이전 페이지 그룹</a>
-        <p><span class="on">1</span><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">6</a><a href="#">7</a><a href="#">8</a><a href="#">9</a><a href="#">10</a></p>
-        <a href="#" class="page_bt next">다음 페이지 그룹</a><a href="#" class="page_bt last">마지막 페이지</a>
+
       </div>
 
       <!--/* 버튼 */-->
@@ -72,4 +59,106 @@
     </section>
   </div> <!--/* .content */-->
 </th:block>
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+
+    window.onload = () => {
+      findAllPost();
+    }
+
+
+    // 게시글 리스트 조회
+    function findAllPost() {
+
+      const list = [[ ${response.list} ]];
+      if ( !list.length ) {
+        document.getElementById('list').innerHTML = '<td colspan="6"><div className="no_data_msg">검색된 결과가 없습니다.</div></td>';
+        drawPage();
+      }
+
+      const pagination = [[ ${response.pagination} ]];
+      const params = [[ ${params} ]];
+      let num = pagination.totalRecordCount - ((params.page - 1) * params.recordSize);
+
+      drawList(list, num);
+      drawPage(pagination, params);
+    }
+
+
+    // 리스트 HTML draw
+    function drawList(list, num) {
+
+      let html = '';
+
+      list.forEach(row => {
+        html += `
+            <tr>
+                <td><input type="checkbox" /></td>
+                <td>${row.noticeYn === false ? num-- : '공지'}</td>
+                <td class="tl"><a href="/post/view.do?id=${row.id}">${row.title}</a></td>
+                <td>${row.writer}</td>
+                <td>${dayjs(row.createdDate).format('YYYY-MM-DD HH:mm')}</td>
+                <td>${row.viewCnt}</td>
+            </tr>
+        `;
+      })
+
+      document.getElementById('list').innerHTML = html;
+    }
+
+
+    // 페이지 HTML draw
+    function drawPage(pagination, params) {
+
+      if ( !pagination || !params ) {
+        document.querySelector('.paging').innerHTML = '';
+        throw new Error('Missing required parameters...');
+      }
+
+      let html = '';
+
+      // 첫 페이지, 이전 페이지
+      if (pagination.existPrevPage) {
+        html += `
+            <a href="javascript:void(0);" onclick="movePage(1)" class="page_bt first">첫 페이지</a>
+            <a href="javascript:void(0);" onclick="movePage(${pagination.startPage - 1})" class="page_bt prev">이전 페이지</a>
+        `;
+      }
+
+      // 페이지 번호
+      html += '<p>';
+      for (let i = pagination.startPage; i <= pagination.endPage; i++) {
+        html += (i !== params.page)
+                ? `<a href="javascript:void(0);" onclick="movePage(${i});">${i}</a>`
+                : `<span class="on">${i}</span>`
+      }
+      html += '</p>';
+
+      // 다음 페이지, 마지막 페이지
+      if (pagination.existNextPage) {
+        html += `
+            <a href="javascript:void(0);" onclick="movePage(${pagination.endPage + 1});" class="page_bt next">다음 페이지</a>
+            <a href="javascript:void(0);" onclick="movePage(${pagination.totalPageCount});" class="page_bt last">마지막 페이지</a>
+        `;
+      }
+
+      document.querySelector('.paging').innerHTML = html;
+    }
+
+
+    // 페이지 이동
+    function movePage(page) {
+      const queryParams = {
+        page: (page) ? page : 1,
+        recordSize: 10,
+        pageSize: 10
+      }
+      location.href = location.pathname + '?' + new URLSearchParams(queryParams).toString();
+    }
+
+    /*]]>*/
+  </script>
+</th:block>
+
 </html>

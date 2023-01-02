@@ -17,4 +17,5 @@ public class PostResponse {
     private LocalDateTime createdDate;     // 생성일시
     private LocalDateTime modifiedDate;    // 최종 수정일시
 
+
 }
