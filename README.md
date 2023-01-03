@@ -19,3 +19,5 @@ https://jojoldu.tistory.com/296 (설정 url 변경)
 https://beautify-log.tistory.com/57?category=997359 (로그인 구현)
 
 http://jmlim.github.io/intellij/2018/11/27/intellij-branch-delete/ (git hub 터미널로 브랜치 지우는법)
+
+https://kkh0977.tistory.com/1106 (엑셀로 DB데이터 insert)
