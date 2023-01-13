@@ -1,4 +1,4 @@
-package com.study.paging;
+package com.study.common.paging;
 
 import lombok.Getter;
 

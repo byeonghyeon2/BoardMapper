@@ -69,7 +69,8 @@
         SELECT <include refid="postColumns" />
           FROM tb_post
          WHERE delete_yn = 0
-         ORDER BY id DESC
+        ORDER BY notice_yn DESC, id DESC
+<!-- 공지글 제일 위로 출력 추가 : noticeYm DESC -->
          LIMIT #{pagination.limitStart}, #{recordSize}
     </select>
 

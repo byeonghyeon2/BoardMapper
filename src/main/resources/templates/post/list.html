@@ -96,6 +96,7 @@
             <tr>
                 <td><input type="checkbox" /></td>
                 <td>${row.noticeYn === false ? num-- : '공지'}</td>
+
                 <td class="tl"><a href="/post/view.do?id=${row.id}">${row.title}</a></td>
                 <td>${row.writer}</td>
                 <td>${dayjs(row.createdDate).format('YYYY-MM-DD HH:mm')}</td>

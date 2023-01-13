@@ -1,8 +1,8 @@
 package com.study.domain.post;
 
 import com.study.common.dto.SearchDto;
-import com.study.paging.Pagination;
-import com.study.paging.PagingResponse;
+import com.study.common.paging.Pagination;
+import com.study.common.paging.PagingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

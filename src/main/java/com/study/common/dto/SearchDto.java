@@ -1,6 +1,6 @@
 package com.study.common.dto;
 
-import com.study.paging.Pagination;
+import com.study.common.paging.Pagination;
 import lombok.Getter;
 import lombok.Setter;
 
